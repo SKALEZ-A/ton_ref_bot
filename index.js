@@ -3,7 +3,7 @@ const path = require("path");
 const axios = require("axios");
 
 // Replace 'YOUR_BOT_TOKEN' with your actual bot token
-const bot = new Telegraf("YOUR_BOT_TOKEN");
+const bot = new Telegraf("6809279648:AAH9CZQIpgeVKZWhg3o2zVv0awic9ArJW7Q");
 
 // Helper function to get the image path
 const imagePath = (fileName) => path.join(__dirname, "images", fileName);
