@@ -1,5 +1,4 @@
 
-
 const { Telegraf } = require("telegraf");
 const axios = require("axios");
 const path = require("path");
@@ -25,7 +24,14 @@ const registerUser = async (userId, username, inviterUsername = "") => {
 bot.start(async (ctx) => {
   const userId = ctx.from.id;
   const username = ctx.from.username || `user${userId}`;
-  const inviterUsername = ctx.payload || "";
+  let inviterUsername = "";
+
+  if (ctx.message && ctx.message.text) {
+    const parts = ctx.message.text.split(' ');
+    if (parts.length > 1) {
+      inviterUsername = parts[1]; // The second part is the inviter's username
+    }
+  }
 
   try {
     await registerUser(userId, username, inviterUsername);
