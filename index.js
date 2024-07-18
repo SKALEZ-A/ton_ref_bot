@@ -1,18 +1,18 @@
 
-
 const { Telegraf } = require("telegraf");
 const axios = require("axios");
 const path = require("path");
+const crypto = require("crypto");
 
 const bot = new Telegraf("6809279648:AAH9CZQIpgeVKZWhg3o2zVv0awic9ArJW7Q");
 
 const imagePath = (fileName) => path.join(__dirname, "images", fileName);
 
-const registerUser = async (userId, username, inviterUsername = "") => {
+const registerUser = async (userId, username, inviterCode = "") => {
   try {
     const response = await axios.post("https://walledb.onrender.com/api/Cluster0/register", {
       userId,
-      inviterUsername,
+      inviterCode,
       username,
     });
     return response.data;
@@ -25,19 +25,21 @@ const registerUser = async (userId, username, inviterUsername = "") => {
 bot.start(async (ctx) => {
   const userId = ctx.from.id;
   const username = ctx.from.username || `user${userId}`;
-  let inviterUsername = "";
+  let inviterCode = "";
 
-  if (ctx.message && ctx.message.text) {
+  if (ctx.payload) {
+    inviterCode = ctx.payload;
+  } else if (ctx.message && ctx.message.text) {
     const parts = ctx.message.text.split(' ');
     if (parts.length > 1) {
-      inviterUsername = parts[1]; // The second part is the inviter's username
+      inviterCode = parts[1];
     }
   }
 
-  console.log(`Inviter Username: ${inviterUsername}`); // Log the inviterUsername for debugging
+  console.log(`Inviter Code: ${inviterCode}`); // Log the inviterCode for debugging
 
   try {
-    const registeredUser = await registerUser(userId, username, inviterUsername);
+    const registeredUser = await registerUser(userId, username, inviterCode);
     console.log(`Registered User: ${registeredUser}`); // Log registered user for debugging
 
     ctx.replyWithPhoto(
