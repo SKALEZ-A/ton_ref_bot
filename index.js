@@ -25,7 +25,7 @@ const registerUser = async (userId, username, inviterUsername = "") => {
 bot.start(async (ctx) => {
   const userId = ctx.from.id;
   const username = ctx.from.username || `user${userId}`;
-  const inviterUsername = ctx.startPayload || "";
+  const inviterUsername = ctx.payload || "";
 
   try {
     await registerUser(userId, username, inviterUsername);
